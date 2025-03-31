@@ -34,7 +34,9 @@ jobs:
           pip install build
 
       - name: Build package
-
+        run: |
+          python3 -m build
+          
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
