@@ -32,7 +32,11 @@ jobs:
           github-token: ${{ github.token }}
           run-id: ${{ github.event.workflow_run.id }}
 
-
+      - name: Print environment variables
+        run: |
+          echo "Namespace: $CLOUDSMITH_NAMESPACE"
+          echo "Repository: $CLOUDSMITH_REPOSITORY"
+          echo "Service Slug: $CLOUDSMITH_SERVICE_SLUG"
 
       - name: List directory contents
         run: ls -la dist/
