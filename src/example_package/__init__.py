@@ -1,3 +1,3 @@
 """Example package for Cloudsmith assessment."""
 
-__version__ = "0.0.1" 
+version = "0.0.1" 
