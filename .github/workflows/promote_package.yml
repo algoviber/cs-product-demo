@@ -41,6 +41,7 @@ jobs:
           # Query for the package and get its identifier
           PACKAGE_QUERY="tag:ready-for-production"
           echo "Searching for package with query: $PACKAGE_QUERY"
+          echo "${{ env.CLOUDSMITH_PRODUCTION_REPO }}"
           
           PACKAGE_DATA=$(cloudsmith list pkgs -q "$PACKAGE_QUERY" -F json ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }})
           
