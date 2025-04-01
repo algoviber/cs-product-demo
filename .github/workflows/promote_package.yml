@@ -9,8 +9,9 @@ env:
   CLOUDSMITH_STAGING_REPO: ${{ github.event.client_payload.repository }}
   CLOUDSMITH_PRODUCTION_REPO: 'production'
   CLOUDSMITH_SERVICE_SLUG: ${{ vars.CLOUDSMITH_SERVICE_SLUG }}
-  PACKAGE_NAME: ${{ github.event.client_payload.pkg_slug }}
+  PACKAGE_SLUG: ${{ github.event.client_payload.pkg_slug }}
   SYNCED: ${{ github.event.client_payload.is_synced }}
+  VERSION: ${{ github.event.client_payload.version }}
 
 permissions:
   id-token: write
@@ -29,7 +30,7 @@ jobs:
       - name: Tag the package
         run: |
           if [ "${{ env.SYNCED }}" = "true" ]; then
-            cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} ready-for-production
+            cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_SLUG }} ready-for-production
           else
             echo "Sync is not completed. Exiting..."
             exit 1
@@ -38,10 +39,10 @@ jobs:
       - name: Get package identifier and promote
         run: |
           # Query for the package and get its identifier
-          PACKAGE_QUERY="filename:${PACKAGE_NAME}-${{ github.event.inputs.package_version }}.tar.gz"
+          PACKAGE_QUERY="tag:ready-for-production"
           echo "Searching for package with query: $PACKAGE_QUERY"
           
-          PACKAGE_DATA=$(cloudsmith list package ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }} -q "$PACKAGE_QUERY" -F json)
+          PACKAGE_DATA=$(cloudsmith list pkgs -q "$PACKAGE_QUERY" -F json ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }})
           
           # Extract the identifier_perm using jq
           IDENTIFIER=$(echo "$PACKAGE_DATA" | jq -r '.data[0].identifier_perm')
