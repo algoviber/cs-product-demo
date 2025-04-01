@@ -26,6 +26,15 @@ jobs:
           oidc-namespace: ${{ env.CLOUDSMITH_NAMESPACE }}
           oidc-service-slug: ${{ env.CLOUDSMITH_SERVICE_SLUG }}
 
+      - name: Tag the package
+        run: |
+          if [ "${{ env.SYNCED }}" = "true" ]; then
+            cloudsmith tags add ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/${{ env.PACKAGE_NAME }} ready-for-production
+          else
+            echo "Sync is not completed. Exiting..."
+            exit 1
+          fi
+
       - name: Get package identifier and promote
         run: |
           # Query for the package and get its identifier
