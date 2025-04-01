@@ -2,7 +2,7 @@ name: Promote Python Package
 
 on:
   repository_dispatch:
-    types: [package.synced]
+    types: [SYNCED]
 
 env:
   CLOUDSMITH_NAMESPACE: ${{ vars.CLOUDSMITH_NAMESPACE }}
@@ -22,7 +22,7 @@ jobs:
       - name: Prining payload
         run: |
           echo "Event Type: ${{ github.event.client_payload.event_type }}"
-          
+
       - name: Install Cloudsmith CLI
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.1
         with:
