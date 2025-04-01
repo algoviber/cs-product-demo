@@ -2,8 +2,7 @@ name: Promote Python Package
 
 on:
   repository_dispatch:
-    types:
-      - webhook
+    types: [cloudsmith-package-synced]
 
 env:
   CLOUDSMITH_NAMESPACE: ${{ vars.CLOUDSMITH_NAMESPACE }}
