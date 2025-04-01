@@ -9,7 +9,7 @@ env:
   CLOUDSMITH_STAGING_REPO: ${{ github.event.client_payload.repository }}
   CLOUDSMITH_PRODUCTION_REPO: 'production'
   CLOUDSMITH_SERVICE_SLUG: ${{ vars.CLOUDSMITH_SERVICE_SLUG }}
-  PACKAGE_NAME: ${{ github.event.client_payload.slug }}
+  PACKAGE_NAME: ${{ github.event.client_payload.pkg_slug }}
   SYNCED: ${{ github.event.client_payload.is_synced }}
 
 permissions:
@@ -20,10 +20,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Prining payload
-        run: |
-          echo "${{ github.event.client_payload.slug }}"
-
       - name: Install Cloudsmith CLI
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.1
         with:
