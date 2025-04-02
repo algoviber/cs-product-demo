@@ -46,15 +46,17 @@ jobs:
           PACKAGE_DATA=$(cloudsmith list pkgs -q "$PACKAGE_QUERY" -F json ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }})
           
           # Extract the identifier_perm using jq
-          IDENTIFIER=$(echo "$PACKAGE_DATA" | jq -r '.data[0].identifier_perm')
+          IDENTIFIERS=$(echo "$PACKAGE_DATA" | jq -r '.data[].identifier_perm')
           
-          if [ -z "$IDENTIFIER" ] || [ "$IDENTIFIER" = "null" ]; then
+          if [ -z "$IDENTIFIERS" ] || [ "$IDENTIFIERS" = "null" ]; then
             echo "Failed to find package identifier"
             exit 1
           fi
           
-          echo "Found package identifier: $IDENTIFIER"
+          echo "Found package identifier: $IDENTIFIERS"
           
           # Promote package using the identifier
-          cloudsmith mv --yes ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/$IDENTIFIER ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
+          for IDENTIFIER in $IDENTIFIERS; do
+            echo "Promoting package: $IDENTIFIER"
+            cloudsmith mv --yes ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/$IDENTIFIER ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
         shell: bash
