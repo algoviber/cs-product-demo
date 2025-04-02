@@ -58,5 +58,7 @@ jobs:
           for IDENTIFIER in $IDENTIFIERS; do
             echo "Promoting package: $IDENTIFIER"
             cloudsmith mv --yes ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/$IDENTIFIER ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
+
+            sleep 5
           done
         shell: bash
