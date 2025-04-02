@@ -53,7 +53,6 @@ jobs:
             exit 1
           fi
           
-          echo "Found package identifier: $IDENTIFIERS"
           
           # Promote package using the identifier
           for IDENTIFIER in $IDENTIFIERS; do
