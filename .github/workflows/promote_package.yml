@@ -42,25 +42,7 @@ jobs:
           PACKAGE_QUERY="tag:ready-for-production"
           echo "Searching for package with query: $PACKAGE_QUERY"
           echo "${{ env.CLOUDSMITH_PRODUCTION_REPO }}"
-          
-          # PACKAGE_DATA=$(cloudsmith list pkgs -q "$PACKAGE_QUERY" -F json ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }})
-          
-          # # Extract the identifier_perm using jq
-          # IDENTIFIERS=$(echo "$PACKAGE_DATA" | jq -r '.data[].identifier_perm')
-          
-          # if [ -z "$IDENTIFIERS" ] || [ "$IDENTIFIERS" = "null" ]; then
-          #   echo "Failed to find package identifier"
-          #   exit 1
-          # fi
-          
-          
-          # # Promote package using the identifier
-          # for IDENTIFIER in $IDENTIFIERS; do
-          #   echo "Promoting package: $IDENTIFIER"
-          #   cloudsmith mv --yes ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }}/$IDENTIFIER ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
 
-          #   sleep 5
-          # done
           cloudsmith ls pkg ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }} -q "$PACKAGE_QUERY" -F json \
           | jq '.data[] | .namespace + "/" + .repository + "/" + .slug' -r \
           | xargs -Ipackage cloudsmith mv --yes package ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
