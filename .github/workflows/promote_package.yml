@@ -61,7 +61,7 @@ jobs:
 
           #   sleep 5
           # done
-          cloudsmith ls pkg YOUR-ACCOUNT/YOUR-REPO -q "$PACKAGE_QUERY" -F json \
+          cloudsmith ls pkg ${{ env.CLOUDSMITH_NAMESPACE }}/${{ env.CLOUDSMITH_STAGING_REPO }} -q "$PACKAGE_QUERY" -F json \
           | jq '.data[] | .namespace + "/" + .repository + "/" + .slug' -r \
           | xargs -Ipackage cloudsmith mv --yes package ${{ env.CLOUDSMITH_PRODUCTION_REPO }}
         shell: bash
