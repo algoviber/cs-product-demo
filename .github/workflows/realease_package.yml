@@ -23,19 +23,6 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: python-package
-          path: dist
-          repository: ${{ github.repository }}
-          github-token: ${{ github.token }}
-          run-id: ${{ github.event.workflow_run.id }}
-
-      - name: List directory contents
-        run: ls -la dist/
-        shell: bash
-
       - name: Installing Cloudsmith CLI
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.1
         with:
