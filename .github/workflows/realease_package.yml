@@ -20,8 +20,6 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-
     steps:
       - name: Installing Cloudsmith CLI
         uses: cloudsmith-io/cloudsmith-cli-action@v1.0.1
